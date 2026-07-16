@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Form</title>
+</head>
+<body>
+
+    <h1>Student Registration Form</h1>
+
+    <p>Please fill in the details below.</p>
+
+    <form>
+        <table border="1" cellpadding="5">
+
+            <tr>
+                <td><label for="name">Name</label></td>
+                <td><input type="text" id="name"></td>
+            </tr>
+
+            <tr>
+                <td><label for="email">Email</label></td>
+                <td><input type="email" id="email"></td>
+            </tr>
+
+            <tr>
+                <td><label for="password">Password</label></td>
+                <td><input type="password" id="password"></td>
+            </tr>
+
+            <tr>
+                <td>Gender</td>
+                <td>
+                    <input type="radio" id="male" name="gender">
+                    <label for="male">Male</label>
+
+                    <input type="radio" id="female" name="gender">
+                    <label for="female">Female</label>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Hobbies</td>
+                <td>
+                    <input type="checkbox" id="reading">
+                    <label for="reading">Reading</label>
+
+                    <input type="checkbox" id="sports">
+                    <label for="sports">Sports</label>
+
+                    <input type="checkbox" id="music">
+                    <label for="music">Music</label>
+                </td>
+            </tr>
+
+            <tr>
+                <td><label for="department">Department</label></td>
+                <td>
+                    <select id="department">
+                        <option>CSE</option>
+                        <option>ECE</option>
+                        <option>EEE</option>
+                        <option>IT</option>
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td><label for="address">Address</label></td>
+                <td>
+                    <textarea id="address" rows="4" cols="20"></textarea>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="submit" value="Submit">
+                    <input type="reset" value="Reset">
+                </td>
+            </tr>
+
+        </table>
+    </form>
+
+    <p>Thank you for filling out the form.</p>
+
+</body>
+</html>
