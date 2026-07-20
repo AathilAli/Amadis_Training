@@ -29,12 +29,15 @@
     <div id="dummy">
         <p>hii</p>
     </div>
+    <h2>What JS do</h2>
+    <p id="para">this element will going to hide</p>
+    <button style="width: 100px; height: 100px;" onclick="document.getElementById('para').style.display='none'">click me</button>
     <script>
-        let ab=document.getElementById("dummy").innerHTML;
+        let ab = document.getElementById("dummy").innerHTML;
         console.log(ab)
         console.log(document.getElementById("dummy"))
-        document.getElementById("dummy").addEventListener("mouseover",function(){
-            document.getElementById("dummy").innerHTML="<h1>hiiiiiiiii</h1>";
+        document.getElementById("dummy").addEventListener("mouseover", function () {
+            document.getElementById("dummy").innerHTML = "<h1>hiiiiiiiii</h1>";
         })
         const name = document.querySelector(".name").innerHTML;
         console.log(name);
