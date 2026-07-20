@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+
+<body>
+    <p id="helo">hello world</p>
+    <button id="button" type="button" onclick="myFunction()">click me</button>
+    <p id="btn">you did not click me</p>
+    <p class="name">Ali</p>
+    <div class="fl">
+        <div class="calculator" id="cal">
+            <button class="one">one</button>
+            <button class="two">two</button>
+            <button class="three">three</button>
+            <button class="four">four</button>
+            <button class="five">five</button>
+            <button class="six">six</button>
+            <button class="seven">seven</button>
+            <button class="eight">eight</button>
+            <button class="nine">nine</button>
+        </div>
+    </div>
+    <div id="dummy">
+        <p>hii</p>
+    </div>
+    <script>
+        let ab=document.getElementById("dummy").innerHTML;
+        console.log(ab)
+        console.log(document.getElementById("dummy"))
+        document.getElementById("dummy").addEventListener("mouseover",function(){
+            document.getElementById("dummy").innerHTML="<h1>hiiiiiiiii</h1>";
+        })
+        const name = document.querySelector(".name").innerHTML;
+        console.log(name);
+        const name1 = document.querySelector(".name");
+        console.log(name1);
+        let a = 10;
+        console.log(a);
+        document.querySelector("#helo").innerHTML = "hi helo welcome";
+        function myFunction() {
+            document.getElementById("btn").innerHTML = "you clicked me";
+        }
+        document.getElementById("button").addEventListener("mouseover", function () {
+            document.getElementById("button").style.background = "yellow";
+        })
+        document.getElementById("button").addEventListener("mousedown", function () {
+            document.getElementById("button").style.background = "red";
+        })
+        console.log(document.getElementById("cal"));
+    </script>
+    <style>
+        .fl {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .calculator {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            width: 300px;
+            height: 300px;
+            border: 2px solid black;
+            gap: 15px;
+            padding: 10px;
+            border-radius: 20px;
+
+        }
+
+        .calculator button {
+            width: 100%;
+        }
+    </style>
+</body>
+
+</html>

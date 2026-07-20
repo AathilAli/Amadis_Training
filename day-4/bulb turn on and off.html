@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="box">
+            <button id="btn1">Turn On</button>
+            <button id="btn2" onclick="document.querySelector('.box').style.backgroundColor='white';">Turn Off</button>
+        </div>
+    </div>
+    <style>
+        body {
+            overflow-y: hidden;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: auto;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .box {
+            width: 300px;
+            height: 300px;
+            border: 2px solid black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+    <script>
+        console.log(document.getElementsByClassName("btn1"));
+        document.getElementById("btn1").addEventListener("click", function () {
+            document.querySelector(".box").style.backgroundColor = "red";
+        })
+
+
+    </script>
+</body>
+
+</html>
