@@ -6,6 +6,7 @@ for (let i = 0; i < a.length; i++) {
 for(let char of a){
     console.log(char)
 }
+
 b="Aathil Ali"
 for (let i = 0; i < a.length; i++) {
     console.log(b[i]);
