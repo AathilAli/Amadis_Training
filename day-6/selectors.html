@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="box">Box 1</div>
+    <div class="box">Box 2</div>
+    <div class="box">Box 3</div>
+    <div id="box2">
+        Hi
+        <span style="display:none">Aathil</span>
+        <p>aathilali</p>
+        <p>hhiiii
+        <p>hiiiiiiiii</p>
+        </p>
+        <b>Ali</b>
+        <p id="change">this is going to change from p into h1</p>
+        <h2 id="change1">this is going to change from h2 into p</h2>
+        <h3 id="change2">this becomes para</h3>
+    </div>
+    <div>
+        <p id="change">hi helo welcome</p>
+        <h1>hi and welcome</h1>
+    </div>
+</body>
+<script>
+    const p1 = document.getElementById("change").textContent = "hello";
+    console.log(p1);
+    const p = document.getElementById("change2");
+    const h1 = document.createElement("p");
+    p.replaceWith(h1);
+
+    h1.innerHTML = "hii";
+    h1.innerText = "hello";
+    h1.textContent = "welcome";
+    let box10 = document.getElementById("change").innerHTML = "<h1>this is  changed into h1 </h1>"
+    console.log(box10);
+    let box11 = document.getElementById("change1").innerHTML = "<p>this is changed into p</p>"
+    console.log(box11);
+    const box4 = document.getElementById("box2");
+    console.log(box4);
+    const box5 = document.getElementById("box2").innerHTML;
+    console.log(box5);
+    const box6 = document.getElementById("box2").innerText;
+    console.log(box6);
+    const box7 = document.getElementById("box2").textContent;
+    console.log(box7);
+    const box2 = document.getElementsByTagName("div");
+    console.log(box2);
+    const box = document.querySelector(".box");
+    console.log(box);
+    const box1 = document.querySelectorAll(".box");
+    console.log(box1);
+    const box3 = document.getElementsByClassName("box");
+    console.log(box3);
+</script>
+
+</html>

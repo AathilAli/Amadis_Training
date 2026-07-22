@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div> <label for="">Enter a number 1:</label>
+        <input id="one" type="number">
+    </div>
+    <div> <label for="">Enter a number 2:</label>
+        <input id="two" type="number">
+    </div>
+    <div>
+        <button id="btn" onclick="add()" for="">output:</button>
+        <h1 id="ans" style="height: 50px; width: 100px; border: 1px solid salmon; text-align: center;"></h1>
+    </div>
+    <p id="demo"></p>
+    <div class="container">
+        Hello
+    </div>
+    <div class="container"></div>
+    <div class="container-1"></div>
+    <button id="btn1">u</button>
+
+    <script>
+        document.getElementById("btn1").addEventListener("", function () {
+            console.log("hiioo");
+            const btn = document.getElementById("btn1");
+            btn.style.backgroundColor = "red";
+            btn.style.width = "100px";
+            btn.height="100px";
+
+        });
+        const a = document.getElementsByTagName("div");
+        console.log(a);
+        a.forEach(element =>
+            element.style.backgroundColor = "brown"
+        );
+        const con = document.getElementsByClassName("container");
+        con[0].style.backgroundColor = "black";
+        con[0].style.color = "white"
+        con[0].style.height = "200px";
+        con[0].style.width = "200px";
+
+        for (let i = 0; i < con.length; i++) {
+
+            con[i].style.backgroundColor = "red";
+            con[i].style.height = "200px";
+            con[i].style.width = "200px";
+        }
+
+        const myPara = document.getElementById("demo");
+        myPara.innerText = "Hello";
+        myPara.innerHTML = "<h1>Hello</h1>";
+        function add() {
+            let a = Number(document.getElementById("one").value);
+            console.log(a);
+            let b = Number(document.getElementById("two").value);
+            console.log(b);
+            let result = a + b;
+            document.getElementById("ans").innerHTML = result;
+        }
+    </script>
+</body>
+
+</html>

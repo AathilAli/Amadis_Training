@@ -53,7 +53,7 @@ arr.reverse();
 
 console.log(arr);
 // [3,2,1]
-let a = [1,2];
+let a = [1,2,3];
 
 let b = [3,4];
 
@@ -79,5 +79,7 @@ let arr = [1,2,3];
 
 console.log(arr.toString());
 // "1,2,3"
+
+
 
 
