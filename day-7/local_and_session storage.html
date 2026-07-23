@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Local Storage vs Session Storage Demo</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        button {
+            margin: 8px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .box {
+            margin-top: 20px;
+            font-size: 20px;
+            color: blue;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Local Storage & Session Storage Demo</h1>
+
+    <button onclick="saveLocal()">
+        Save Local Storage
+    </button>
+
+    <button onclick="getLocal()">
+        Read Local Storage
+    </button>
+
+    <button onclick="clearLocal()">
+        Clear Local Storage
+    </button>
+
+
+
+
+    <button onclick="saveSession()">
+        Save Session Storage
+    </button>
+
+    <button onclick="getSession()">
+        Read Session Storage
+    </button>
+
+    <button onclick="clearSession()">
+        Clear Session Storage
+    </button>
+
+    <div class="box" id="output"></div>
+
+    <script>
+
+        function saveLocal() {
+
+            localStorage.setItem("username", "Shameem");
+            console.log(output);
+
+            output.innerHTML = "Saved username in Local Storage";
+        }
+
+        function getLocal() {
+
+            let value = localStorage.getItem("username");
+
+            output.innerHTML = "Local Storage : " + value;
+        }
+
+        function clearLocal() {
+
+            localStorage.removeItem("username");
+
+            output.innerHTML = "Local Storage Cleared";
+        }
+
+        function saveSession() {
+
+            sessionStorage.setItem("username", "Shameem");
+
+            output.innerHTML = "Saved username in Session Storage";
+        }
+
+        function getSession() {
+
+            let value = sessionStorage.getItem("username");
+
+            output.innerHTML = "Session Storage : " + value;
+        }
+
+        function clearSession() {
+
+            sessionStorage.removeItem("username");
+
+            output.innerHTML = "Session Storage Cleared";
+        }
+
+    </script>
+
+</body>
+
+</html>

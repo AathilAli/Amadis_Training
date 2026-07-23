@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <input id="name">
+    <button onclick="save()">Save for local</button>
+    <button onclick="load()">Load for local</button>
+    <button onclick="saves()">Save for session</button>
+    <button onclick="loads()">Load for session</button>
+
+</body>
+<script>
+    let user = {
+        name: "Ali",
+        age: 20
+    };
+    localStorage.setItem("user", user);
+
+    localStorage.setItem("age", 20);
+    localStorage.setItem("name", "aathil");
+    localStorage.setItem("name", "ali");
+
+    localStorage.setItem("city", "Chennai");
+    let x = localStorage.getItem("name");
+    console.log(x);
+    localStorage.removeItem("city");
+    console.log(localStorage.getItem("city"));
+    console.log(localStorage.length);
+    function save() {
+        const name = document.getElementById("name").value;
+        localStorage.setItem("username", name);
+    }
+
+    function load() {
+        document.getElementById("name").value =
+            localStorage.getItem("username");
+    }
+    function saves() {
+
+        const name =
+            document.getElementById("name").value;
+
+        sessionStorage.setItem("username", name);
+
+    }
+
+    function loads() {
+
+        document.getElementById("name").value =
+            sessionStorage.getItem("username");
+
+    }
+    localStorage.setItem(
+        "user",
+        JSON.stringify(user)
+    );
+
+</script>
+
+</html>
