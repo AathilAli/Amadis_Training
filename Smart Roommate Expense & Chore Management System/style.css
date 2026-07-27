@@ -1,0 +1,259 @@
+/* ==========================================================================
+   RoomMate+ — "The Household Ledger"
+   A shared-living tracker styled like a hand-kept ledger book: paper
+   sections with folder-tab labels, dotted receipt-style rows, and
+   monospace figures for anything involving money or dates.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* -- Palette -- */
+  --paper: #EAE4D6;
+  --paper-card: #F6F2E7;
+  --ink: #23262B;
+  --ink-soft: #5B5A52;
+  --rule: #C9C0AC;
+
+  --roommates: #8A6FB0;   /* muted violet — people */
+  --expenses: #3D6B5C;    /* deep teal — money */
+  --chores: #B5542A;      /* burnt sienna — tasks */
+  --balance-neg: #A6432C;
+
+  --radius: 3px;
+  --shadow: 0 1px 0 rgba(35, 38, 43, 0.06), 0 8px 16px -12px rgba(35, 38, 43, 0.25);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 3rem 1.5rem 5rem;
+  background:
+    repeating-linear-gradient(180deg, rgba(35,38,43,0.025) 0px, rgba(35,38,43,0.025) 1px, transparent 1px, transparent 34px),
+    var(--paper);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+h1 {
+  max-width: 760px;
+  margin: 0 auto 2.5rem;
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: clamp(2.2rem, 5vw, 3rem);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-align: center;
+  position: relative;
+}
+
+h1::after {
+  content: "shared house, shared ledger";
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 0.5rem;
+}
+
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* -- Section "ledger card" with a folder tab -- */
+section {
+  position: relative;
+  background: var(--paper-card);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2rem 1.75rem 1.75rem;
+}
+
+section::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 1.75rem;
+  width: 44px;
+  height: 10px;
+  background: var(--section-color, var(--ink-soft));
+  border-radius: 3px 3px 0 0;
+}
+
+section h2 {
+  margin: 0 0 1.25rem;
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+section h2::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--section-color, var(--ink-soft));
+  flex-shrink: 0;
+}
+
+#dashboard   { --section-color: var(--ink); }
+#roommates   { --section-color: var(--roommates); }
+#expenses    { --section-color: var(--expenses); }
+#balances    { --section-color: var(--expenses); }
+#chores      { --section-color: var(--chores); }
+
+/* -- Dashboard -- */
+#dashboard {
+  display: grid;
+  gap: 0.75rem;
+}
+
+#dashboard p {
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.65rem 0;
+  border-bottom: 1px dotted var(--rule);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.95rem;
+}
+
+#dashboard p:last-child { border-bottom: none; }
+
+#dashboard p::before {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+}
+
+#roommateCount::before   { content: "PEOPLE UNDER THIS ROOF"; }
+#totalExpenses::before   { content: "RUNNING TOTAL"; }
+#pendingChores::before   { content: "STILL UNDONE"; }
+
+#totalExpenses { color: var(--expenses); font-weight: 600; }
+#pendingChores { color: var(--chores); font-weight: 600; }
+
+/* -- Form controls -- */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--ink);
+  margin: 0 0.5rem 0.75rem 0;
+  min-width: 180px;
+}
+
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--section-color, var(--ink));
+  outline-offset: 2px;
+}
+
+button {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.6rem 1.1rem;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--section-color, var(--ink));
+  color: var(--paper-card);
+  cursor: pointer;
+  transition: transform 0.08s ease, opacity 0.15s ease;
+}
+
+button:hover { opacity: 0.9; }
+button:active { transform: translateY(1px); }
+
+/* -- Lists (roommates / expenses / chores) styled as receipt rows -- */
+ul {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px dotted var(--rule);
+  font-size: 0.92rem;
+}
+
+li:last-child { border-bottom: none; }
+
+#expenseList li,
+#balanceList li {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88rem;
+}
+
+#roommateList li::before {
+  content: "•";
+  color: var(--roommates);
+  margin-right: 0.5rem;
+}
+
+#choreList li::before {
+  content: "▢";
+  color: var(--chores);
+  margin-right: 0.5rem;
+  font-size: 0.8rem;
+}
+
+#choreList li.completed span {
+  text-decoration: line-through;
+  color: var(--ink-soft);
+}
+
+/* Empty-state hint when a list has no items */
+ul:empty::after {
+  content: "nothing here yet";
+  display: block;
+  padding: 0.5rem 0;
+  color: var(--ink-soft);
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
+/* -- Balances: color the number by sign via data attribute (set in JS),
+      falls back gracefully if not present -- */
+#balanceList li[data-owed="true"] { color: var(--balance-neg); }
+#balanceList li[data-owed="false"] { color: var(--expenses); }
+
+/* -- Responsive -- */
+@media (max-width: 600px) {
+  body { padding: 2rem 1rem 3rem; }
+  section { padding: 1.5rem 1.25rem 1.25rem; }
+  input, select { width: 100%; margin-right: 0; min-width: 0; }
+  button { width: 100%; }
+}
+
+/* -- Reduced motion -- */
+@media (prefers-reduced-motion: reduce) {
+  button { transition: none; }
+}

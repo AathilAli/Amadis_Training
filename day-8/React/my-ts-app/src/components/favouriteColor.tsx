@@ -15,7 +15,9 @@ export function IncOrDec() {
     return (
         <div>
             <button onClick={() => set(count + 1)}>Increase</button>
+            <h1>{count}</h1>
             <button onClick={() => set(count > 0 ? count - 1 : 0)}>Decrease</button>
+            
 
         </div>
     );

@@ -3,10 +3,14 @@ import logo from './logo.svg';
 import Car from './components/car';
 import { Garage } from './components/garage';
 // import './App.css';
+import Football from './components/football';
 import Sample from './components/garage';
 import Props from './components/props';
 import FavouriteColor from './components/favouriteColor';
 import { IncOrDec } from './components/favouriteColor';
+import { Greet } from './components/football';
+import User from './components/user';
+import MouseEvent from './components/mouse_event';
 function App() {
   return ( 
     <div>
@@ -16,6 +20,10 @@ function App() {
       <Garage />
       <FavouriteColor />
       <IncOrDec />
+      <Football />
+      <Greet />
+      <User />
+      <MouseEvent />
     </div>
   );
   
