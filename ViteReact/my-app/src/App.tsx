@@ -1,17 +1,11 @@
-import Form from "./components/form"
-import './App.css'
-import Home from "./components/home";
-import { createRootRoute } from "@tanstack/react-router";
-
-
 function App() {
-
-  return(
-    <div className="box">
-      {/* <Form />     
-      <Home />  */}
+  return (
+    <div className="flex h-screen items-center justify-center bg-blue-500">
+      <h1 className="text-5xl font-bold text-white">
+        Tailwind is Working 🚀
+      </h1>
     </div>
-  )
+  );
 }
 
 export default App;

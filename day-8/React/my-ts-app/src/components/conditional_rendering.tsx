@@ -12,8 +12,11 @@ function Add() {
     // return (
     //     <button onClick={ ()=>console.log("")}></button>
     // )
+    const a=()=>{
+        alert("this is aathil")
+    }
     return(
-        <input type="text" />
+        <button onClick={a}>click  this button</button>
     )
 
 

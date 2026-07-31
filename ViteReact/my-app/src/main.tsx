@@ -4,8 +4,10 @@ import { RouterProvider } from "@tanstack/react-router";
 import "./index.css";
 import { router } from "./router";
 
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <RouterProvider router={router} />
+    
   </StrictMode>
 );

@@ -10,6 +10,7 @@ import "./App.css";
 // import { IncOrDec } from './components/favouriteColor';
 // import { Greet } from './components/football';
 // import User from './components/user';
+import Form from "./components/form";
 import Add from "./components/conditional_rendering";
 import MouseEvent from './components/mouse_event';
 function App() {
@@ -25,7 +26,8 @@ function App() {
       <Greet />
       <User /> */}
       {/* <MouseEvent /> */}
-      <Add />
+      {/* <Add /> */}
+      <Form />
     </div>
   );
   
