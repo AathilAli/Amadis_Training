@@ -13,6 +13,7 @@ import { ChecklistSection } from "@/components/checklist/ChecklistSection";
 import { ProgressIndicator } from "@/components/checklist/ProgressIndicator";
 import { EditActivities } from "@/components/trip/EditActivities";
 
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
