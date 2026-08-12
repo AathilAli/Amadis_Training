@@ -1,22 +1,19 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RoomMate+</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-
     <h1>RoomMate+</h1>
 
     <main>
-
         <!-- Dashboard -->
         <section id="dashboard">
-
             <h2>Dashboard</h2>
 
             <p id="roommateCount">Roommates: 0</p>
@@ -24,74 +21,60 @@
             <p id="totalExpenses">Total Expenses: ₹0</p>
 
             <p id="pendingChores">Pending Chores: 0</p>
-
         </section>
 
         <!-- Roommates -->
         <section id="roommates">
-
             <h2>Roommates</h2>
 
-            <input type="text" id="input" placeholder="Enter roommate name">
+            <input type="text" id="input" placeholder="Enter roommate name" />
 
-            <button id="addRoommate">
-                Add Roommate
-            </button>
+            <button id="addRoommate">Add Roommate</button>
 
             <ul id="roommateList"></ul>
-
         </section>
 
         <!-- Expenses -->
         <section id="expenses">
-
             <h2>Expenses</h2>
 
-            <input type="text" id="expenseDescription" placeholder="Expense Description">
+            <input type="text" id="expenseDescription" placeholder="Expense Description" />
 
-            <input type="number" id="expenseAmount" placeholder="Amount">
+            <input type="number" id="expenseAmount" placeholder="Amount" />
 
             <select id="paidBy">
                 <option value="">Select Roommate</option>
             </select>
 
-            <button id="addExpense">
-                Add Expense
-            </button>
+            <button id="addExpense">Add Expense</button>
 
-            <input type="text" id="expenseSearch" placeholder="Search expenses...">
+            <input type="text" id="expenseSearch" placeholder="Search expenses..." />
 
             <ul id="expenseList"></ul>
-
         </section>
 
         <!-- Balances -->
         <section id="balances">
-
             <h2>Balances</h2>
 
             <ul id="balanceList"></ul>
-
         </section>
 
         <!-- chores -->
         <section id="chores">
-
             <h2>Chores</h2>
 
-            <input type="text" id="choreName" placeholder="Enter Chore">
+            <input type="text" id="choreName" placeholder="Enter Chore" />
 
             <select id="assignTo">
                 <option value="">Assign Roommate</option>
             </select>
 
-            <input type="date" id="dueDate">
+            <input type="date" id="dueDate" />
 
-            <button id="addChore">
-                Add Chore
-            </button>
+            <button id="addChore">Add Chore</button>
 
-            <input type="text" id="choreSearch" placeholder="Search chores...">
+            <input type="text" id="choreSearch" placeholder="Search chores..." />
 
             <select id="choreFilter">
                 <option value="all">All Chores</option>
@@ -100,13 +83,10 @@
             </select>
 
             <ul id="choreList"></ul>
-
         </section>
-
     </main>
 
     <script src="script.js"></script>
-
 </body>
 
 </html>

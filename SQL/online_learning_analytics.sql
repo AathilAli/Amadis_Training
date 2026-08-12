@@ -274,107 +274,79 @@ VALUES
 
 SELECT * FROM Certificates;
 
-SELECT u.name, c.course_name
-FROM Users u
-JOIN Lesson_Progress lp ON u.user_id = lp.user_id
-JOIN Lessons l ON lp.lesson_id = l.lesson_id
-JOIN Courses c ON l.course_id = c.course_id
-GROUP BY u.name, c.course_name;
-
-SELECT 
+-- //complete all the lesson but no certificate
+SELECT
     u.name,
     c.course_name
 FROM Users u
-JOIN Lesson_Progress lp 
+JOIN Lesson_Progress lp
     ON u.user_id = lp.user_id
-JOIN Lessons l 
+JOIN Lessons l
     ON lp.lesson_id = l.lesson_id
-JOIN Courses c 
+JOIN Courses c
     ON l.course_id = c.course_id
+LEFT JOIN Certificates cert
+    ON u.user_id = cert.user_id
+    AND c.course_id = cert.course_id
 WHERE lp.completed = TRUE
-GROUP BY u.user_id, u.name, c.course_id, c.course_name
-HAVING COUNT(DISTINCT lp.lesson_id) = (
-    SELECT COUNT(*)
-    FROM Lessons l2
-    WHERE l2.course_id = c.course_id
-)
-AND NOT EXISTS (
-    SELECT 1
-    FROM Certificates cert
-    WHERE cert.user_id = u.user_id
-      AND cert.course_id = c.course_id
-);
+  AND cert.certificate_id IS NULL
+GROUP BY u.name, c.course_name
+HAVING COUNT(lp.lesson_id) = 4;
 
 
-SELECT 
-    c.course_name,
-    ROUND(AVG(qr.score), 2) AS average_score
+
+-- //course with average quiz score less than 60
+
+SELECT c.course_name, Round(AVG(qr.score),2) AS average_score
 FROM Courses c
-JOIN Quizzes q 
-    ON c.course_id = q.course_id
-JOIN Quiz_Results qr 
-    ON q.quiz_id = qr.quiz_id
-GROUP BY c.course_id, c.course_name
+JOIN Quizzes q ON c.course_id = q.course_id
+JOIN Quiz_Results qr ON q.quiz_id = qr.quiz_id
+GROUP BY c.course_name
 HAVING AVG(qr.score) < 60;
 
-SELECT 
-    u.name,
-    COUNT(*) AS passed_courses
-FROM Users u
-JOIN Quiz_Results qr 
-    ON u.user_id = qr.user_id
-JOIN Quizzes q 
-    ON qr.quiz_id = q.quiz_id
-GROUP BY u.user_id, u.name, q.course_id
-HAVING AVG(qr.score) >= 60;
 
-SELECT 
+-- Find users who passed more than 1 courses.
+
+SELECT
+    u.name,
+    COUNT(DISTINCT q.course_id) AS passed_courses
+FROM Users u
+JOIN Quiz_Results qr
+    ON u.user_id = qr.user_id
+JOIN Quizzes q
+    ON qr.quiz_id = q.quiz_id
+WHERE qr.score >= 60
+GROUP BY u.user_id, u.name
+HAVING COUNT(DISTINCT q.course_id) > 1;
+
+-- //drop off rate enrolled but completed less than or equal to 2 lesson
+
+
+SELECT
     u.name,
     c.course_name,
     COUNT(lp.lesson_id) AS lessons_completed
 FROM Users u
-JOIN Enrollments e 
-    ON u.user_id = e.user_id
-JOIN Courses c 
-    ON e.course_id = c.course_id
-LEFT JOIN Lessons l 
-    ON c.course_id = l.course_id
-LEFT JOIN Lesson_Progress lp 
-    ON u.user_id = lp.user_id
-    AND l.lesson_id = lp.lesson_id
-    AND lp.completed = TRUE
-GROUP BY u.user_id, u.name, c.course_id, c.course_name
-HAVING COUNT(lp.lesson_id) <= 2
-ORDER BY lessons_completed;
-
-
-SELECT
-    c.course_name,
-    COUNT(*) AS total_enrolled,
-    COUNT(*) FILTER (
-        WHERE COALESCE(progress.lessons_completed, 0) <= 2
-    ) AS dropped_off,
-    ROUND(
-        COUNT(*) FILTER (
-            WHERE COALESCE(progress.lessons_completed, 0) <= 2
-        ) * 100.0 / COUNT(*),
-        2
-    ) AS drop_off_rate
-FROM Enrollments e
+JOIN Enrollments e
+ON u.user_id = e.user_id
 JOIN Courses c
-    ON e.course_id = c.course_id
-LEFT JOIN (
-    SELECT
-        e2.enrollment_id,
-        COUNT(lp.lesson_id) AS lessons_completed
-    FROM Enrollments e2
-    LEFT JOIN Lesson_Progress lp
-        ON e2.user_id = lp.user_id
-        AND lp.completed = TRUE
-    LEFT JOIN Lessons l
-        ON lp.lesson_id = l.lesson_id
-        AND l.course_id = e2.course_id
-    GROUP BY e2.enrollment_id
-) progress
-    ON e.enrollment_id = progress.enrollment_id
-GROUP BY c.course_id, c.course_name;
+ON e.course_id = c.course_id
+LEFT JOIN Lessons l
+ON c.course_id = l.course_id
+LEFT JOIN Lesson_Progress lp
+ON u.user_id = lp.user_id
+AND l.lesson_id = lp.lesson_id
+AND lp.completed = TRUE
+GROUP BY u.user_id, u.name, c.course_id, c.course_name
+HAVING COUNT(lp.lesson_id) <= 2;
+
+
+
+SELECT * FROM Users;
+SELECT * FROM Enrollments;
+SELECT * FROM Courses;
+SELECT * FROM Lessons;
+SELECT * FROM lesson_progress;
+SELECT * FROM Quizzes;
+SELECT * FROM quiz_results;
+SELECT * FROM Certificates;

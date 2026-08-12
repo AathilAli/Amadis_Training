@@ -11,3 +11,4 @@ const studentRoutes = require("./routes/student.routes");
 fastify.register(studentRoutes);
 
 module.exports = fastify;
+

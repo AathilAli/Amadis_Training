@@ -211,13 +211,13 @@ function applyExpenseFilter() {
       e.description.toLowerCase().includes(term) ||
       getRoommateName(e.paidBy).toLowerCase().includes(term)
   );
-}
+} 
 
 // =========================
 // Balances
 // =========================
 function calculateBalances() {
-  balanceList.innerHTML = "";
+  balanceList.innerHTML = ""; 
 
   const totalExpense = expenses.reduce((sum, e) => sum + e.amount, 0);
   const share = roommates.length > 0 ? totalExpense / roommates.length : 0;
