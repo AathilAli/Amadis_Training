@@ -1,0 +1,84 @@
+/* =========================================
+   HERO — fade in on load
+========================================= */
+
+@keyframes home-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.home-fade-in {
+  opacity: 0;
+  animation: home-fade-in 0.6s ease-out forwards;
+}
+
+.home-fade-in-delay-1 {
+  animation-delay: 0.1s;
+}
+
+.home-fade-in-delay-2 {
+  animation-delay: 0.2s;
+}
+
+/* =========================================
+   Cuisine strip — slim horizontal scrollbar
+========================================= */
+
+.home-scroll-row {
+  scrollbar-width: thin;
+  scrollbar-color: #e5e7eb transparent;
+}
+
+.home-scroll-row::-webkit-scrollbar {
+  height: 6px;
+}
+
+.home-scroll-row::-webkit-scrollbar-thumb {
+  background-color: #e5e7eb;
+  border-radius: 999px;
+}
+
+.home-scroll-row::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* =========================================
+   Delivery scooter — subtle side-to-side drift
+========================================= */
+
+@keyframes home-delivery-drift {
+  0%,
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+  25% {
+    transform: translateX(-5px) rotate(-3deg);
+  }
+  75% {
+    transform: translateX(5px) rotate(3deg);
+  }
+}
+
+.home-delivery-emoji {
+  display: inline-block;
+  animation: home-delivery-drift 3.5s ease-in-out infinite;
+}
+
+/* =========================================
+   Respect reduced-motion preferences
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .home-fade-in,
+  .home-delivery-emoji {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

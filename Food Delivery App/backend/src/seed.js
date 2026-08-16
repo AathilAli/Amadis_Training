@@ -31,35 +31,103 @@ const restaurants = [
 ];
 
 const menuItems = [
+  // Spice Garden
   {
-    restaurantId: 1,
+    restaurantName: "Spice Garden",
     name: "Chicken Biryani",
     price: 180,
-    description: "Aromatic basmati rice with tender chicken.",
+    description:
+      "Aromatic basmati rice with tender chicken.",
   },
   {
-    restaurantId: 1,
+    restaurantName: "Spice Garden",
     name: "Paneer Butter Masala",
     price: 160,
-    description: "Paneer cooked in a creamy tomato gravy.",
+    description:
+      "Paneer cooked in a creamy tomato gravy.",
   },
   {
-    restaurantId: 1,
+    restaurantName: "Spice Garden",
     name: "Garlic Naan",
     price: 50,
-    description: "Soft naan topped with garlic and butter.",
+    description:
+      "Soft naan topped with garlic and butter.",
   },
+
+  // Pizza House
   {
-    restaurantId: 2,
+    restaurantName: "Pizza House",
     name: "Margherita Pizza",
     price: 220,
-    description: "Classic pizza with tomato, mozzarella and basil.",
+    description:
+      "Classic pizza with tomato, mozzarella and basil.",
   },
   {
-    restaurantId: 2,
+    restaurantName: "Pizza House",
     name: "Farmhouse Pizza",
     price: 280,
-    description: "Pizza loaded with fresh vegetables.",
+    description:
+      "Pizza loaded with fresh vegetables.",
+  },
+
+  // Dragon Bowl
+  {
+    restaurantName: "Dragon Bowl",
+    name: "Chicken Fried Rice",
+    price: 180,
+    description:
+      "Fried rice tossed with chicken and fresh vegetables.",
+  },
+  {
+    restaurantName: "Dragon Bowl",
+    name: "Chicken Noodles",
+    price: 160,
+    description:
+      "Stir-fried noodles with chicken and vegetables.",
+  },
+  {
+    restaurantName: "Dragon Bowl",
+    name: "Dragon Chicken",
+    price: 220,
+    description:
+      "Crispy chicken tossed in a spicy Asian sauce.",
+  },
+  {
+    restaurantName: "Dragon Bowl",
+    name: "Veg Manchurian",
+    price: 140,
+    description:
+      "Crispy vegetable balls in a flavorful Manchurian sauce.",
+  },
+
+  // Burger Point
+  {
+    restaurantName: "Burger Point",
+    name: "Classic Chicken Burger",
+    price: 150,
+    description:
+      "Juicy chicken patty with lettuce and special sauce.",
+  },
+  {
+    restaurantName: "Burger Point",
+    name: "Cheese Burger",
+    price: 170,
+    description:
+      "Classic burger topped with melted cheese.",
+  },
+  {
+    restaurantName: "Burger Point",
+    name: "Double Chicken Burger",
+    price: 220,
+    description:
+      "Two juicy chicken patties with fresh toppings.",
+  },
+  {
+    restaurantName: "Burger Point",
+    name: "French Fries",
+    price: 100,
+    description:
+      "Crispy golden french fries.",
   },
 ];
 
@@ -69,23 +137,59 @@ async function seed() {
 
     console.log("Database connected.");
 
-    await Restaurant.destroy({
-      where: {},
-      truncate: true,
-      cascade: true,
-      restartIdentity: true,
-    });
+    // Create restaurants only if they don't already exist
+    for (const restaurantData of restaurants) {
+      const [restaurant, created] =
+        await Restaurant.findOrCreate({
+          where: {
+            name: restaurantData.name,
+          },
+          defaults: restaurantData,
+        });
 
-    const createdRestaurants =
-      await Restaurant.bulkCreate(restaurants);
+      console.log(
+        created
+          ? `Created restaurant: ${restaurant.name}`
+          : `Restaurant already exists: ${restaurant.name}`,
+      );
+    }
 
-    console.log(
-      `${createdRestaurants.length} restaurants created.`,
-    );
+    // Add menu items without deleting existing data
+    for (const item of menuItems) {
+      const restaurant =
+        await Restaurant.findOne({
+          where: {
+            name: item.restaurantName,
+          },
+        });
 
-    await MenuItem.bulkCreate(menuItems);
+      if (!restaurant) {
+        console.log(
+          `Restaurant not found: ${item.restaurantName}`,
+        );
+        continue;
+      }
 
-    console.log("Menu items created.");
+      const [menuItem, created] =
+        await MenuItem.findOrCreate({
+          where: {
+            restaurantId: restaurant.id,
+            name: item.name,
+          },
+          defaults: {
+            restaurantId: restaurant.id,
+            name: item.name,
+            price: item.price,
+            description: item.description,
+          },
+        });
+
+      console.log(
+        created
+          ? `Created menu item: ${menuItem.name} → ${restaurant.name}`
+          : `Menu item already exists: ${menuItem.name}`,
+      );
+    }
 
     console.log("Database seeded successfully.");
   } catch (error) {
