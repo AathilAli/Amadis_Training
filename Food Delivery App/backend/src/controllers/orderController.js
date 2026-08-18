@@ -1,10 +1,17 @@
 const sequelize = require("../config/database");
+
 const {
   Order,
   OrderItem,
   MenuItem,
   DeliveryStatus,
+  Restaurant,
+  User,
 } = require("../models");
+
+// ==========================================
+// CUSTOMER - CREATE ORDER
+// ==========================================
 
 async function createOrder(request, reply) {
   const transaction = await sequelize.transaction();
@@ -52,8 +59,7 @@ async function createOrder(request, reply) {
         });
       }
 
-      const itemTotal =
-        Number(menuItem.price) * quantity;
+      const itemTotal = Number(menuItem.price) * quantity;
 
       total += itemTotal;
 
@@ -70,6 +76,7 @@ async function createOrder(request, reply) {
         restaurantId,
         total,
         status: "Placed",
+        deliveryStaffId: null,
       },
       {
         transaction,
@@ -111,6 +118,7 @@ async function createOrder(request, reply) {
         restaurantId: order.restaurantId,
         total: order.total,
         status: order.status,
+        deliveryStaffId: order.deliveryStaffId,
       },
     });
   } catch (error) {
@@ -123,6 +131,10 @@ async function createOrder(request, reply) {
     });
   }
 }
+
+// ==========================================
+// CUSTOMER - GET OWN ORDERS
+// ==========================================
 
 async function getOrders(request, reply) {
   try {
@@ -154,10 +166,223 @@ async function getOrders(request, reply) {
   }
 }
 
+// ==========================================
+// OWNER - GET RESTAURANT ORDERS
+// ==========================================
+
+async function getOwnerOrders(request, reply) {
+  try {
+    const ownerId = request.user.id;
+
+    // Find restaurants owned by this owner
+    const restaurants = await Restaurant.findAll({
+      where: {
+        ownerId,
+      },
+      attributes: ["id", "name"],
+    });
+
+    if (restaurants.length === 0) {
+      return reply.send([]);
+    }
+
+    const restaurantIds = restaurants.map(
+      (restaurant) => restaurant.id,
+    );
+
+    // Get orders belonging to owner's restaurants
+    const orders = await Order.findAll({
+      where: {
+        restaurantId: restaurantIds,
+      },
+      include: [
+        {
+          model: OrderItem,
+          include: [MenuItem],
+        },
+        {
+          model: DeliveryStatus,
+        },
+        {
+          model: Restaurant,
+          attributes: ["id", "name"],
+        },
+        {
+          model: User,
+          as: "customer",
+          attributes: ["id", "name", "email"],
+        },
+        {
+          model: User,
+          as: "deliveryStaff",
+          attributes: ["id", "name", "email", "role"],
+          required: false,
+        },
+      ],
+      order: [["createdAt", "DESC"]],
+    });
+
+    return reply.send(orders);
+  } catch (error) {
+    request.log.error(error);
+
+    return reply.status(500).send({
+      message: "Failed to fetch owner orders",
+    });
+  }
+}
+
+// ==========================================
+// OWNER - ASSIGN DELIVERY STAFF
+// ==========================================
+
+async function assignDeliveryStaff(request, reply) {
+  const transaction = await sequelize.transaction();
+
+  try {
+    const ownerId = request.user.id;
+    const { orderId } = request.params;
+    const { deliveryStaffId } = request.body;
+
+    if (!deliveryStaffId) {
+      await transaction.rollback();
+
+      return reply.status(400).send({
+        message: "Delivery staff ID is required",
+      });
+    }
+
+    // Check delivery staff exists and has correct role
+    const deliveryStaff = await User.findOne({
+      where: {
+        id: deliveryStaffId,
+        role: "delivery_staff",
+      },
+      transaction,
+    });
+
+    if (!deliveryStaff) {
+      await transaction.rollback();
+
+      return reply.status(404).send({
+        message: "Delivery staff not found",
+      });
+    }
+
+    // Find the order
+    const order = await Order.findByPk(orderId, {
+      include: [
+        {
+          model: Restaurant,
+          attributes: ["id", "name", "ownerId"],
+        },
+      ],
+      transaction,
+    });
+
+    if (!order) {
+      await transaction.rollback();
+
+      return reply.status(404).send({
+        message: "Order not found",
+      });
+    }
+
+    // Make sure this order belongs to the logged-in owner's restaurant
+    if (
+      !order.Restaurant ||
+      order.Restaurant.ownerId !== ownerId
+    ) {
+      await transaction.rollback();
+
+      return reply.status(403).send({
+        message: "You can only assign delivery staff to your own restaurant orders",
+      });
+    }
+
+    // Assign delivery staff
+    order.deliveryStaffId = deliveryStaffId;
+
+    await order.save({
+      transaction,
+    });
+
+    await transaction.commit();
+
+    return reply.send({
+      message: "Delivery staff assigned successfully",
+      order: {
+        id: order.id,
+        restaurantId: order.restaurantId,
+        deliveryStaffId: order.deliveryStaffId,
+        status: order.status,
+      },
+    });
+  } catch (error) {
+    await transaction.rollback();
+
+    request.log.error(error);
+
+    return reply.status(500).send({
+      message: "Failed to assign delivery staff",
+    });
+  }
+}
+
+// ==========================================
+// DELIVERY STAFF - GET ASSIGNED ORDERS
+// ==========================================
+
+async function getDeliveryOrders(request, reply) {
+  try {
+    const deliveryStaffId = request.user.id;
+
+    const orders = await Order.findAll({
+      where: {
+        deliveryStaffId,
+      },
+      include: [
+        {
+          model: OrderItem,
+          include: [MenuItem],
+        },
+        {
+          model: DeliveryStatus,
+        },
+        {
+          model: Restaurant,
+          attributes: ["id", "name", "cuisine"],
+        },
+        {
+          model: User,
+          as: "customer",
+          attributes: ["id", "name", "email"],
+        },
+      ],
+      order: [["createdAt", "DESC"]],
+    });
+
+    return reply.send(orders);
+  } catch (error) {
+    request.log.error(error);
+
+    return reply.status(500).send({
+      message: "Failed to fetch delivery orders",
+    });
+  }
+}
+
+// ==========================================
+// OWNER / DELIVERY STAFF - UPDATE STATUS
+// ==========================================
+
 async function updateOrderStatus(request, reply) {
   const transaction = await sequelize.transaction();
 
   try {
+    const userId = request.user.id;
+    const userRole = request.user.role;
+
     const { orderId } = request.params;
     const { status } = request.body;
 
@@ -177,6 +402,12 @@ async function updateOrderStatus(request, reply) {
     }
 
     const order = await Order.findByPk(orderId, {
+      include: [
+        {
+          model: Restaurant,
+          attributes: ["id", "name", "ownerId"],
+        },
+      ],
       transaction,
     });
 
@@ -186,6 +417,62 @@ async function updateOrderStatus(request, reply) {
       return reply.status(404).send({
         message: "Order not found",
       });
+    }
+
+    // ==========================================
+    // OWNER PERMISSION
+    // ==========================================
+
+    if (userRole === "restaurant_owner") {
+      // Owner can only update orders from their own restaurant
+      if (
+        !order.Restaurant ||
+        order.Restaurant.ownerId !== userId
+      ) {
+        await transaction.rollback();
+
+        return reply.status(403).send({
+          message: "You can only manage orders from your own restaurant",
+        });
+      }
+
+      // Owner handles restaurant preparation
+      if (status !== "Preparing") {
+        await transaction.rollback();
+
+        return reply.status(403).send({
+          message:
+            "Restaurant owner can only change the order to Preparing",
+        });
+      }
+    }
+
+    // ==========================================
+    // DELIVERY STAFF PERMISSION
+    // ==========================================
+
+    if (userRole === "delivery_staff") {
+      // Delivery staff can only update their assigned orders
+      if (order.deliveryStaffId !== userId) {
+        await transaction.rollback();
+
+        return reply.status(403).send({
+          message: "This order is not assigned to you",
+        });
+      }
+
+      // Delivery staff handles delivery statuses
+      if (
+        status !== "Out for Delivery" &&
+        status !== "Delivered"
+      ) {
+        await transaction.rollback();
+
+        return reply.status(403).send({
+          message:
+            "Delivery staff can only change status to Out for Delivery or Delivered",
+        });
+      }
     }
 
     order.status = status;
@@ -198,7 +485,7 @@ async function updateOrderStatus(request, reply) {
       {
         orderId: order.id,
         status,
-        updatedBy: request.user.id,
+        updatedBy: userId,
       },
       {
         transaction,
@@ -212,6 +499,7 @@ async function updateOrderStatus(request, reply) {
       order: {
         id: order.id,
         status: order.status,
+        deliveryStaffId: order.deliveryStaffId,
       },
     });
   } catch (error) {
@@ -228,5 +516,8 @@ async function updateOrderStatus(request, reply) {
 module.exports = {
   createOrder,
   getOrders,
+  getOwnerOrders,
+  assignDeliveryStaff,
+  getDeliveryOrders,
   updateOrderStatus,
 };

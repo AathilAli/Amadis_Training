@@ -29,6 +29,12 @@ const Restaurant = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+
+    // The user who owns this restaurant
+    ownerId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
   },
   {
     tableName: "restaurants",
